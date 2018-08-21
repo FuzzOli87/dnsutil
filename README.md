@@ -1,11 +1,14 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/lixiangzhong/dnsutil)](https://goreportcard.com/report/lixiangzhong/dnsutil)
-[![](https://godoc.org/github.com/lixiangzhong/dnsutil?status.svg)](https://godoc.org/github.com/lixiangzhong/dnsutil)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cmpoon/dnsutil)](https://goreportcard.com/report/cmpoon/dnsutil)
+[![](https://godoc.org/github.com/cmpoon/dnsutil?status.svg)](https://godoc.org/github.com/cmpoon/dnsutil)
 
 # dnsutil
-#### Golang DNS  dig功能库
+#### Golang DNS  dig featureset
+
+_Translated version of [this repo](https://github.com/lixiangzhong/dnsutil)._
+
 
 ```sh
-go get github.com/lixiangzhong/dnsutil
+go get github.com/cmpoon/dnsutil
 ```
 
 
@@ -16,12 +19,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/lixiangzhong/dnsutil"
+	"github.com/cmpoon/dnsutil"
 )
 
 func main() {
     var dig dnsutil.Dig 
-    dig.SetDNS("8.8.8.8") //or ns.xxx.com 
+    dig.SetDNS("1.1.1.1") //or ns.xxx.com 
     a, err := dig.A("google.com")  // dig google.com @8.8.8.8
     fmt.Println(a, err)
 }
@@ -35,7 +38,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lixiangzhong/dnsutil"
+	"github.com/cmpoon/dnsutil"
 )
 
 func main() {
@@ -55,13 +58,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/lixiangzhong/dnsutil"
+	"github.com/cmpoon/dnsutil"
 )
 
 func main() {
     var dig dnsutil.Dig
     dig.Retry=3 //retry  when write or read message return error . defualt 1
-    dig.SetDNS("8.8.8.8") //or ns.xxx.com 
+    dig.SetDNS("1.1.1.1") //or ns.xxx.com 
     a, err := dig.A("google.com")  // dig google.com @8.8.8.8
     fmt.Println(a, err)
 }
@@ -75,7 +78,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lixiangzhong/dnsutil"
+	"github.com/cmpoon/dnsutil"
 )
 
 func main() {
@@ -102,13 +105,13 @@ func main() {
 
 
 ```go
-//检查是否被污染
+//Check whether the DNS record has been overridden by non-authoritative means (e.g. ISP blocking)
 
 package main
 
 import (
 	"fmt"
-	"github.com/lixiangzhong/dnsutil"
+	"github.com/cmpoon/dnsutil"
 )
 
 func main() {
@@ -118,9 +121,9 @@ func main() {
 		return
 	}
 	if polluted {
-		fmt.Println("被污染,你懂的")
+		fmt.Println("Detected unauthorised alteration to DNS record")
 	} else {
-		fmt.Println("正常")
+		fmt.Println("Normal")
 	}
 }
 ```

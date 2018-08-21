@@ -86,7 +86,7 @@ func dial(network string, local string, remote string, timeout time.Duration) (n
 	network = strings.ToLower(network)
 	dialer := new(net.Dialer)
 	dialer.Timeout = timeout
-	local = local + ":0" //端口0,系统会自动分配本机端口
+	local = local + ":0" //Port 0 means a random port will be assigned
 	switch network {
 	case "udp":
 		addr, err := net.ResolveUDPAddr(network, local)
@@ -104,7 +104,7 @@ func dial(network string, local string, remote string, timeout time.Duration) (n
 	return dialer.Dial(network, remote)
 }
 
-//NewMsg  返回query msg
+//NewMsg  returns query msg
 func NewMsg(Type uint16, domain string) *dns.Msg {
 	return newMsg(Type, domain)
 }
@@ -123,7 +123,7 @@ func newMsg(Type uint16, domain string) *dns.Msg {
 	return msg
 }
 
-//Exchange 发送msg 接收响应
+//Exchange sends msg, receives reply
 func (d *Dig) Exchange(m *dns.Msg) (*dns.Msg, error) {
 	var msg *dns.Msg
 	var err error
@@ -168,7 +168,7 @@ func (d *Dig) SetTimeOut(t time.Duration) {
 	d.DialTimeout = t
 }
 
-//SetDNS 设置查询的dns server
+//SetDNS Sets queried dns server
 func (d *Dig) SetDNS(host string) error {
 	var ip string
 	port := "53"
@@ -354,7 +354,7 @@ func (d *Dig) CAA(domain string) ([]*dns.CAA, error) {
 	return C, nil
 }
 
-//GetRR 返回ANSWER SECTION
+//GetRR Returns ANSWER SECTION
 func (d *Dig) GetRR(Type uint16, domain string) ([]dns.RR, error) {
 	m := newMsg(Type, domain)
 	res, err := d.Exchange(m)
@@ -364,7 +364,7 @@ func (d *Dig) GetRR(Type uint16, domain string) ([]dns.RR, error) {
 	return res.Answer, nil
 }
 
-//GetMsg 返回msg响应体
+//GetMsg Returns msg Answer Section
 func (d *Dig) GetMsg(Type uint16, domain string) (*dns.Msg, error) {
 	m := newMsg(Type, domain)
 	return d.Exchange(m)
@@ -387,14 +387,14 @@ func (d *Dig) edns0clientsubnet(m *dns.Msg) {
 	m.Extra = append(m.Extra, o)
 }
 
-//TraceResponse  dig +trace 响应
+//TraceResponse  dig +trace Reply
 type TraceResponse struct {
 	Server   string
 	ServerIP string
 	Msg      *dns.Msg
 }
 
-//Trace  类似于 dig +trace
+//Trace  Emulates dig +trace
 func (d *Dig) Trace(domain string) ([]TraceResponse, error) {
 	var responses = make([]TraceResponse, 0)
 	var servers = make([]string, 0, 13)
@@ -441,7 +441,7 @@ func randserver(servers []string) string {
 	return servers[r.Intn(length)]
 }
 
-//IsPolluted  返回domain是否被污染
+//IsPolluted  Returns whether the DNS record has been altered from its authoritative record
 func IsPolluted(domain string) (bool, error) {
 	var dig Dig
 	rsps, err := dig.Trace(domain)
