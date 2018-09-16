@@ -3,11 +3,12 @@ package dnsutil
 import (
 	"errors"
 	"fmt"
-	"github.com/miekg/dns"
 	"math/rand"
 	"net"
 	"strings"
 	"time"
+
+	"github.com/miekg/dns"
 )
 
 const (
@@ -272,6 +273,22 @@ func (d *Dig) PTR(domain string) ([]*dns.PTR, error) {
 		}
 	}
 	return P, nil
+}
+
+//SPF dig ptr
+func (d *Dig) SPF(domain string) ([]*dns.SPF, error) {
+	m := newMsg(dns.TypeSPF, domain)
+	res, err := d.Exchange(m)
+	if err != nil {
+		return nil, err
+	}
+	var S []*dns.SPF
+	for _, v := range res.Answer {
+		if p, ok := v.(*dns.SPF); ok {
+			S = append(S, p)
+		}
+	}
+	return S, nil
 }
 
 //TXT dig txt
